@@ -1,4 +1,4 @@
-from main.py import parens_match_iterative(), parens_match_scan(), parens_match_dc()
+from main import parens_match_iterative, parens_match_scan, parens_match_dc
 
 #### Iterative solution test
 def test_parens_match_iterative():

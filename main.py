@@ -3,8 +3,8 @@ CMPS 2200  Assignment 2.
 See assignment-02.md for details.
 """
 from collections import defaultdict
-from functools import reduce
 import math
+import functools
 
 #### Iterative solution
 def parens_match_iterative(mylist):
@@ -84,12 +84,24 @@ def parens_match_scan(mylist):
     """
     ###TODO
     history, last = scan(plus, 0, list(map(paren_map, mylist)))
-    return last == 0 and reduce(min_f, 0, history) >= 0
+    return last == 0 and (len(history) == 0 or functools.reduce(min_f, history, 0) >= 0)
     ###
 
 def plus(a, b):
     return a + b
 
+def reduce(function, iterable, initial=None):
+    iterator = iter(iterable)
+
+    if initial is None:
+        value = next(iterator)  # First item in iterable
+    else:
+        value = initial
+
+    for item in iterator:
+        value = function(value, item)
+
+    return value
 
 def scan(f, id_, a):
     """
@@ -99,8 +111,8 @@ def scan(f, id_, a):
     the more efficient version is used for analyzing work/span.
     """
     return (
-            [reduce(f, id_, a[:i+1]) for i in range(len(a))],
-             reduce(f, id_, a)
+            [reduce(f, a[:i+1], id_) for i in range(len(a))],
+            reduce(f, a, id_)
            )
 
 def paren_map(x):
